@@ -1,0 +1,55 @@
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Build outputs
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+
+# Temporary files
+.tmp/
+temp/
+
+# Replit specific
+.replit
+replit.nix
+.upm/
+
+# Database files (if using SQLite)
+*.sqlite
+*.db
