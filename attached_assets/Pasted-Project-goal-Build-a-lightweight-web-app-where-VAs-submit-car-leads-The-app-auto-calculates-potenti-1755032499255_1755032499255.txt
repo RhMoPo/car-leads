@@ -1,0 +1,370 @@
+Project goal
+Build a lightweight web app where VAs submit car leads. The app auto calculates potential profit and estimated VA commission. There is no per VA login. Admin uses a single shared password to access the dashboard. VAs submit via a public link and choose or type their VA name on each submission. Include a training sidebar with embedded videos.
+
+Tech stack
+
+Next.js 14 with App Router
+
+TypeScript
+
+Prisma ORM with SQLite (file based db)
+
+NextAuth not needed. Use a simple session with iron-session or a signed cookie
+
+Tailwind CSS for UI
+
+Zod for form validation
+
+dayjs for dates
+
+Routes and pages
+
+/submit public page
+
+Lead submission form. VA selects existing VA name from dropdown or types a new one which auto creates a VA record.
+
+Fields listed under “Lead form fields”.
+
+On submit, server validates with Zod, saves to DB, calculates derived fields, and returns a success toast with the computed profit and commission.
+
+/login admin login
+
+Single password form. Compare against ADMIN_PASSWORD_HASH using bcrypt. On success set signed session cookie. Redirect to dashboard.
+
+/dashboard admin only
+
+Sidebar with sections: Training, Submit, Leads, Settings.
+
+Main area shows a filterable, sortable table of leads. Columns listed under “Leads table columns”.
+
+Top KPI cards: New this week, Approved, Bought, Sold, Average estimated profit, Average actual profit.
+
+Row actions: Approve, Reject, Mark Contacted, Mark Bought, Mark Sold, Mark Paid.
+
+When marking Sold, require Actual Sale Price and optional Actual Expenses, then compute Actual Profit and Actual Commission.
+
+/training public and linked in sidebar
+
+Show an Introduction section plus 3 video slots: How to find cars, How to price cars, How to use this system.
+
+Each video is a stored URL field and rendered in an iframe. Admin can edit URLs in Settings.
+
+/settings admin only
+
+Commission rules editor with three inputs: flatSmall, smallMax, mediumMax, percentMedium, percentLarge. Defaults: flatSmall 40, smallMax 400, mediumMax 800, percentMedium 0.10, percentLarge 0.15.
+
+Location radius integer (miles). Default 30.
+
+Allowed regions text. Default Hereford or Worcester, UK.
+
+Training video URLs.
+
+Save updates to a single row Settings table.
+
+Lead form fields
+
+VA Name (select existing or input new)
+
+Car Make
+
+Car Model
+
+Year (number)
+
+Mileage (number)
+
+Asking Price GBP (number)
+
+Estimated Sale Price GBP (number)
+
+Estimated Expenses GBP optional, default 0
+
+Seller Name
+
+Location (town or postcode)
+
+Facebook Listing Link (URL)
+
+Condition Notes (textarea)
+
+Why it is a good deal (textarea)
+
+Status default Pending
+
+Date Found auto now
+
+Derived fields and business rules
+
+EstimatedProfit = EstimatedSalePrice - AskingPrice - EstimatedExpenses
+
+Commission logic function:
+
+ts
+Copy
+Edit
+export function estimateCommission(profit: number, s: Settings) {
+  if (profit < s.smallMax) return s.flatSmall;
+  if (profit <= s.mediumMax) return Math.round(profit * s.percentMedium);
+  return Math.round(profit * s.percentLarge);
+}
+When status is changed to Sold, compute:
+ActualProfit = ActualSalePrice - AskingPrice - ActualExpenses
+ActualCommission uses same commission function but with ActualProfit.
+
+Store both estimated values and actual values.
+
+Lead status workflow
+
+Pending
+
+Approved
+
+Rejected
+
+Contacted
+
+Bought
+
+Sold
+
+Paid
+
+Leads table columns
+
+CreatedAt
+
+VA Name
+
+Make Model Year
+
+Mileage
+
+Asking Price
+
+Estimated Sale Price
+
+Estimated Expenses
+
+Estimated Profit
+
+Estimated Commission
+
+Status
+
+Actions
+
+Validation rules
+
+Year >= 2010
+
+Asking Price <= 3000
+
+Location must include Hereford or Worcester, or fail with a clear message
+
+Condition constraints in a checklist component: allow minor fixables like dead battery, flat tyre, small dents or scratches, worn tyres, minor interior wear. Reject major faults like engine knock, gearbox failure, severe rust, unrepaired accident damage.
+
+URL must be valid HTTP or HTTPS
+
+Authentication and session
+
+Single admin password only.
+
+ADMIN_PASSWORD_HASH env var is a bcrypt hash.
+
+Use iron-session or similar to set a signed cookie admin_session=true with 7 day expiry.
+
+Middleware protects /dashboard and /settings.
+
+Anti spam and abuse
+
+Public submit uses a hidden honeypot input. If filled, reject.
+
+Simple IP based rate limit on /api/leads such as 20 requests per hour per IP.
+
+No file uploads.
+
+Prisma schema
+Create models for VA, Lead, Settings.
+
+prisma
+Copy
+Edit
+model VA {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  leads     Lead[]
+}
+
+model Lead {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  vaId               String
+  va                 VA       @relation(fields: [vaId], references: [id])
+  make               String
+  model              String
+  year               Int
+  mileage            Int
+  askingPrice        Int
+  estimatedSalePrice Int
+  estimatedExpenses  Int      @default(0)
+  estimatedProfit    Int
+  estimatedCommission Int
+  sellerName         String
+  location           String
+  listingUrl         String
+  conditionNotes     String
+  goodDealReason     String
+  status             LeadStatus @default(PENDING)
+  // actuals when sold
+  actualSalePrice    Int?
+  actualExpenses     Int?
+  actualProfit       Int?
+  actualCommission   Int?
+}
+
+enum LeadStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CONTACTED
+  BOUGHT
+  SOLD
+  PAID
+}
+
+model Settings {
+  id            Int     @id @default(1)
+  radiusMiles   Int     @default(30)
+  allowedRegions String  @default("Hereford or Worcester, UK")
+  flatSmall     Int     @default(40)
+  smallMax      Int     @default(400)
+  mediumMax     Int     @default(800)
+  percentMedium Float   @default(0.10)
+  percentLarge  Float   @default(0.15)
+  videoIntroUrl String? 
+  videoFindUrl  String?
+  videoPriceUrl String?
+  videoUseUrl   String?
+}
+API endpoints
+
+POST /api/leads create lead. Server calculates EstimatedProfit and EstimatedCommission using current Settings.
+
+GET /api/leads list with query params for status, date range, VA name, search text.
+
+PATCH /api/leads/:id/status admin only. Accept new status. If setting Sold, require ActualSalePrice and optional ActualExpenses then compute actuals.
+
+GET /api/vas return VA list for the dropdown.
+
+POST /api/vas create VA when a new name is entered.
+
+GET /api/settings and PATCH /api/settings admin only.
+
+POST /api/login compare password with bcrypt hash and set session cookie.
+
+POST /api/logout clear cookie.
+
+UI and UX
+
+Minimal Tailwind styling.
+
+Sidebar with four items: Training, Submit, Leads, Settings.
+
+Sticky header with a search box that filters make, model, seller, location.
+
+Table rows color coded by profit:
+
+profit >= 800 green tint
+
+400 to 799 amber tint
+
+below 400 red tint
+
+On the Submit page, show live computed Estimated Profit and Estimated Commission as the user types numbers.
+
+After creating a lead, show a success toast with the computed figures.
+
+Security notes
+
+Never expose the admin hash. Only compare on server.
+
+Validate and sanitize all fields server side with Zod.
+
+Enforce CORS same origin.
+
+Rate limit public create endpoint.
+
+Environment variables
+
+ADMIN_PASSWORD_HASH bcrypt hash of your admin password
+
+SESSION_SECRET a long random string
+
+DATABASE_URL set to file based SQLite URL for Prisma, for example file:./prisma/data.db
+
+Seed script
+
+Create Settings with defaults.
+
+Create three VA records: Kenneth, TestVA1, TestVA2.
+
+Insert two sample leads for demo.
+
+Acceptance tests checklist
+
+Can submit a valid lead on /submit and see computed profit and commission.
+
+Invalid year or asking price shows inline error.
+
+Dashboard requires login.
+
+Status transitions work and SOLD dialog computes actuals.
+
+Settings updates change the commission calculation on new leads.
+
+Filtering and search on the dashboard work for VA name, status, and date range.
+
+Nice to have
+
+Export leads to CSV.
+
+Duplicate lead detection by listing URL hash.
+
+Simple chart of leads per VA and profit by week.
+
+Out of scope for v1
+
+Per VA user accounts.
+
+File uploads.
+
+Mobile app. The site must be mobile friendly.
+
+Coding tasks
+
+Scaffold Next.js App Router project with Tailwind and Prisma.
+
+Implement Prisma schema and migration.
+
+Build /submit, /login, /dashboard, /training, /settings.
+
+Add API routes with Zod validation.
+
+Add iron-session cookie based auth for admin.
+
+Add simple rate limiter middleware on POST /api/leads.
+
+Add unit tests for commission function and profit calculations.
+
+If you want, I can also generate the Prisma schema file, the commission utility, and the form Zod schema as ready to paste code.
+
+
+
+
+
+
+
+
+
+Ask ChatGPT
