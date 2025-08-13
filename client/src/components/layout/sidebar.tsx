@@ -1,33 +1,34 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { BarChart3, Plus, GraduationCap, Settings, LogOut, Car } from "lucide-react";
 
 const navItems = [
   {
     href: "/dashboard",
     label: "Dashboard", 
-    icon: "📊",
+    icon: BarChart3,
     gradient: "from-purple-500 to-indigo-600",
     adminOnly: true,
   },
   {
     href: "/submit",
     label: "Submit Lead",
-    icon: "🚗",
+    icon: Plus,
     gradient: "from-emerald-500 to-teal-600",
     adminOnly: false,
   },
   {
     href: "/training", 
     label: "Training",
-    icon: "🎓",
+    icon: GraduationCap,
     gradient: "from-amber-500 to-orange-600",
     adminOnly: false,
   },
   {
     href: "/settings",
     label: "Settings",
-    icon: "⚙️", 
+    icon: Settings, 
     gradient: "from-slate-500 to-gray-600",
     adminOnly: true,
   },
@@ -45,8 +46,8 @@ export function Sidebar() {
       
       <div className="relative z-10 p-8 border-b border-gray-100">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
-            🚗
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+            <Car className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-800">CarLead Pro</h1>
@@ -77,7 +78,7 @@ export function Sidebar() {
                 )}
                 
                 <span className="relative flex items-center">
-                  <span className="text-xl mr-4">{item.icon}</span>
+                  <item.icon className="w-5 h-5 mr-4" />
                   <span className="font-medium">{item.label}</span>
                 </span>
                 
@@ -96,7 +97,7 @@ export function Sidebar() {
           className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-all duration-200 group"
           data-testid="button-logout"
         >
-          <span className="text-lg mr-4 group-hover:animate-pulse">🚪</span>
+          <LogOut className="w-5 h-5 mr-4 group-hover:animate-pulse" />
           <span>Logout</span>
         </button>
       </div>

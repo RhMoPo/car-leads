@@ -132,7 +132,7 @@ export default function SettingsPage() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* Commission Rules */}
             <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">💰 Commission Rules</h3>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Commission Rules</h3>
               <p className="text-sm text-slate-600 mb-6">Configure how VA commissions are calculated based on profit levels.</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -8,22 +8,22 @@ export default function TrainingPage() {
 
   const videoSections = [
     {
-      title: "🔍 How to Find Cars",
+      title: "How to Find Cars",
       url: settings?.videoFindUrl,
       description: "Learn effective search techniques, filters to use, and red flags to avoid when browsing Facebook Marketplace for car leads.",
     },
     {
-      title: "💷 How to Price Cars", 
+      title: "How to Price Cars", 
       url: settings?.videoPriceUrl,
       description: "Master the art of accurate vehicle valuation using market research tools and pricing strategies for maximum profit.",
     },
     {
-      title: "⚙️ How to Use This System",
+      title: "How to Use This System",
       url: settings?.videoUseUrl,
       description: "Step-by-step guide to submitting leads, understanding calculations, and tracking your submissions through the system.",
     },
     {
-      title: "👋 Introduction Video",
+      title: "Introduction Video",
       url: settings?.videoIntroUrl,
       description: "Get started with an overview of the entire process, commission structure, and success tips from experienced VAs.",
     },
@@ -38,7 +38,7 @@ export default function TrainingPage() {
 
         {/* Introduction Section */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 mb-8">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">📚 Introduction</h3>
+          <h3 className="text-xl font-semibold text-slate-800 mb-4">Introduction</h3>
           <div className="prose prose-slate max-w-none">
             <p>Welcome to the Car Lead System training program. This comprehensive guide will teach you how to:</p>
             <ul className="list-disc list-inside space-y-2 text-slate-600">
@@ -48,7 +48,7 @@ export default function TrainingPage() {
               <li>Understand the commission structure and profit calculations</li>
             </ul>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-              <h4 className="font-semibold text-blue-900 mb-2">💡 Quick Tips for Success</h4>
+              <h4 className="font-semibold text-blue-900 mb-2">Quick Tips for Success</h4>
               <ul className="text-sm text-blue-800 space-y-1">
                 <li>• Focus on cars with profit potential above £400 for better commissions</li>
                 <li>• Always verify the location includes Hereford or Worcester</li>
@@ -89,7 +89,7 @@ export default function TrainingPage() {
 
         {/* Commission Structure Info */}
         <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border border-blue-200 p-8">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">💰 Commission Structure</h3>
+          <h3 className="text-xl font-semibold text-slate-800 mb-4">Commission Structure</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">

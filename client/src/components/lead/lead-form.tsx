@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { VA } from "@shared/schema";
+import { TrendingUp } from "lucide-react";
 
 const formSchema = z.object({
   vaName: z.string().min(1, "VA name is required"),
@@ -139,7 +140,7 @@ export function LeadForm() {
           <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-emerald-700 mb-1">💰 Live Calculation</p>
+                <p className="text-sm font-medium text-emerald-700 mb-1">Live Calculation</p>
                 <div className="flex items-center space-x-6">
                   <div>
                     <span className="text-2xl font-bold text-emerald-800">£{calculatedProfit}</span>
@@ -151,7 +152,9 @@ export function LeadForm() {
                   </div>
                 </div>
               </div>
-              <div className="text-4xl">🎯</div>
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
             </div>
           </div>
         )}
@@ -180,7 +183,7 @@ export function LeadForm() {
                     >
                       <FormControl>
                         <SelectTrigger className="modern-input" data-testid="select-va-name">
-                          <SelectValue placeholder="👤 Select VA or choose new" />
+                          <SelectValue placeholder="Select VA or choose new" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -208,7 +211,7 @@ export function LeadForm() {
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="🆕 Enter new VA name"
+                          placeholder="Enter new VA name"
                           className="modern-input"
                           data-testid="input-new-va-name"
                         />
@@ -227,7 +230,7 @@ export function LeadForm() {
                   <FormItem>
                     <FormLabel>Car Make</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="🚗 e.g., Ford" className="modern-input" data-testid="input-make" />
+                      <Input {...field} placeholder="e.g., Ford" className="modern-input" data-testid="input-make" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -242,7 +245,7 @@ export function LeadForm() {
                   <FormItem>
                     <FormLabel>Car Model</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="🏷️ e.g., Focus" className="modern-input" data-testid="input-model" />
+                      <Input {...field} placeholder="e.g., Focus" className="modern-input" data-testid="input-model" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -476,7 +479,7 @@ export function LeadForm() {
                   </div>
 
                   <div className="mt-4 p-3 bg-red-50 rounded-lg">
-                    <p className="text-sm text-red-700 font-medium mb-2">⚠️ Major issues (these will be rejected):</p>
+                    <p className="text-sm text-red-700 font-medium mb-2">Major issues (these will be rejected):</p>
                     <div className="grid grid-cols-2 gap-2 text-sm text-red-600">
                       <div>• Engine knock</div>
                       <div>• Gearbox failure</div>
@@ -510,7 +513,7 @@ export function LeadForm() {
 
             {/* Live Calculation Display */}
             <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4">💰 Live Calculation</h3>
+              <h3 className="text-lg font-semibold text-blue-900 mb-4">Live Calculation</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-blue-700 mb-1">Estimated Profit</p>
@@ -542,7 +545,7 @@ export function LeadForm() {
                 className="modern-button flex-1 sm:flex-none"
                 data-testid="button-clear-form"
               >
-                🗑️ Clear Form
+                Clear Form
               </Button>
               <Button
                 type="submit"
@@ -550,7 +553,7 @@ export function LeadForm() {
                 className="gradient-button modern-button flex-1"
                 data-testid="button-submit-lead"
               >
-                {submitMutation.isPending ? "⏳ Submitting..." : "🚀 Submit Lead"}
+                {submitMutation.isPending ? "Submitting..." : "Submit Lead"}
               </Button>
             </div>
           </form>

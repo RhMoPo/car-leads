@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { KPIData } from "@/lib/types";
+import { TrendingUp, CheckCircle, DollarSign, Car } from "lucide-react";
 
 export function KPICards() {
   const { data: kpis, isLoading } = useQuery<KPIData>({
@@ -30,7 +31,7 @@ export function KPICards() {
     {
       label: "New This Week",
       value: kpis.newThisWeek,
-      icon: "📈",
+      icon: TrendingUp,
       gradient: "from-emerald-500 to-teal-600",
       bgColor: "from-emerald-50 to-teal-50",
       change: "+12%",
@@ -40,7 +41,7 @@ export function KPICards() {
     {
       label: "Approved",
       value: kpis.approved,
-      icon: "✅",
+      icon: CheckCircle,
       gradient: "from-blue-500 to-indigo-600", 
       bgColor: "from-blue-50 to-indigo-50",
       change: "75%",
@@ -50,7 +51,7 @@ export function KPICards() {
     {
       label: "Avg Est. Profit",
       value: `£${kpis.avgEstimatedProfit}`,
-      icon: "💰",
+      icon: DollarSign,
       gradient: "from-amber-500 to-orange-600",
       bgColor: "from-amber-50 to-orange-50",
       change: "+8%",
@@ -60,7 +61,7 @@ export function KPICards() {
     {
       label: "Sold This Month",
       value: kpis.sold,
-      icon: "🚗",
+      icon: Car,
       gradient: "from-purple-500 to-pink-600",
       bgColor: "from-purple-50 to-pink-50",
       change: "+15%",
@@ -87,7 +88,7 @@ export function KPICards() {
                 <p className="text-3xl font-bold text-gray-800">{card.value}</p>
               </div>
               <div className={`w-14 h-14 bg-gradient-to-br ${card.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
-                <span className="text-xl">{card.icon}</span>
+                <card.icon className="w-6 h-6" />
               </div>
             </div>
             
