@@ -133,11 +133,28 @@ export function LeadForm() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-slate-800">Submit New Car Lead</h2>
-          <p className="text-slate-600 mt-2">Fill in the details below to submit a new car lead for review.</p>
-        </div>
+      <div className="gradient-card p-8 rounded-3xl relative overflow-hidden">
+        {/* Real-time calculation display */}
+        {(calculatedProfit > 0 || calculatedCommission > 0) && (
+          <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-emerald-700 mb-1">💰 Live Calculation</p>
+                <div className="flex items-center space-x-6">
+                  <div>
+                    <span className="text-2xl font-bold text-emerald-800">£{calculatedProfit}</span>
+                    <p className="text-sm text-emerald-600">Est. Profit</p>
+                  </div>
+                  <div>
+                    <span className="text-2xl font-bold text-emerald-800">£{calculatedCommission}</span>
+                    <p className="text-sm text-emerald-600">Your Commission</p>
+                  </div>
+                </div>
+              </div>
+              <div className="text-4xl">🎯</div>
+            </div>
+          </div>
+        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -162,8 +179,8 @@ export function LeadForm() {
                       value={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger data-testid="select-va-name">
-                          <SelectValue placeholder="Select VA or choose new" />
+                        <SelectTrigger className="modern-input" data-testid="select-va-name">
+                          <SelectValue placeholder="👤 Select VA or choose new" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -191,7 +208,8 @@ export function LeadForm() {
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Enter new VA name"
+                          placeholder="🆕 Enter new VA name"
+                          className="modern-input"
                           data-testid="input-new-va-name"
                         />
                       </FormControl>
@@ -209,7 +227,7 @@ export function LeadForm() {
                   <FormItem>
                     <FormLabel>Car Make</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Ford" data-testid="input-make" />
+                      <Input {...field} placeholder="🚗 e.g., Ford" className="modern-input" data-testid="input-make" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -224,7 +242,7 @@ export function LeadForm() {
                   <FormItem>
                     <FormLabel>Car Model</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Focus" data-testid="input-model" />
+                      <Input {...field} placeholder="🏷️ e.g., Focus" className="modern-input" data-testid="input-model" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -512,7 +530,7 @@ export function LeadForm() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <Button
                 type="button"
                 variant="outline"
@@ -521,16 +539,18 @@ export function LeadForm() {
                   setCalculatedProfit(0);
                   setCalculatedCommission(0);
                 }}
+                className="modern-button flex-1 sm:flex-none"
                 data-testid="button-clear-form"
               >
-                Clear Form
+                🗑️ Clear Form
               </Button>
               <Button
                 type="submit"
                 disabled={submitMutation.isPending}
+                className="gradient-button modern-button flex-1"
                 data-testid="button-submit-lead"
               >
-                {submitMutation.isPending ? "Submitting..." : "Submit Lead"}
+                {submitMutation.isPending ? "⏳ Submitting..." : "🚀 Submit Lead"}
               </Button>
             </div>
           </form>

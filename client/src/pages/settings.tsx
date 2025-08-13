@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -51,7 +52,7 @@ export default function SettingsPage() {
   });
 
   // Update form when settings are loaded
-  React.useEffect(() => {
+  useEffect(() => {
     if (settings) {
       form.reset({
         radiusMiles: settings.radiusMiles,

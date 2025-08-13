@@ -54,9 +54,9 @@ export function LeadsTable({ searchQuery, statusFilter }: LeadsTableProps) {
   };
 
   const getRowBackground = (profit: number) => {
-    if (profit >= 800) return "bg-green-50";
-    if (profit >= 400) return "bg-amber-50";
-    return "bg-red-50";
+    if (profit >= 800) return "profit-row-high";
+    if (profit >= 400) return "profit-row-medium";
+    return "profit-row-low";
   };
 
   const getAvailableActions = (status: string) => {

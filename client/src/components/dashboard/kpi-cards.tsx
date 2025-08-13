@@ -8,15 +8,15 @@ export function KPICards() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 animate-pulse">
+          <div key={i} className="gradient-card p-6 rounded-2xl animate-pulse">
             <div className="flex items-center">
               <div className="flex-1">
-                <div className="h-4 bg-slate-200 rounded w-24 mb-2"></div>
-                <div className="h-8 bg-slate-200 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 rounded-xl w-24 mb-3"></div>
+                <div className="h-8 bg-gray-200 rounded-xl w-16"></div>
               </div>
-              <div className="w-12 h-12 bg-slate-200 rounded-lg"></div>
+              <div className="w-14 h-14 bg-gray-200 rounded-2xl"></div>
             </div>
           </div>
         ))}
@@ -30,57 +30,78 @@ export function KPICards() {
     {
       label: "New This Week",
       value: kpis.newThisWeek,
-      icon: "fas fa-plus",
-      color: "blue",
+      icon: "📈",
+      gradient: "from-emerald-500 to-teal-600",
+      bgColor: "from-emerald-50 to-teal-50",
       change: "+12%",
       changeLabel: "from last week",
+      changePositive: true,
     },
     {
       label: "Approved",
       value: kpis.approved,
-      icon: "fas fa-check",
-      color: "green", 
+      icon: "✅",
+      gradient: "from-blue-500 to-indigo-600", 
+      bgColor: "from-blue-50 to-indigo-50",
       change: "75%",
       changeLabel: "approval rate",
+      changePositive: true,
     },
     {
       label: "Avg Est. Profit",
       value: `£${kpis.avgEstimatedProfit}`,
-      icon: "fas fa-pound-sign",
-      color: "amber",
+      icon: "💰",
+      gradient: "from-amber-500 to-orange-600",
+      bgColor: "from-amber-50 to-orange-50",
       change: "+8%",
       changeLabel: "from last month",
+      changePositive: true,
     },
     {
       label: "Sold This Month",
       value: kpis.sold,
-      icon: "fas fa-car",
-      color: "emerald",
+      icon: "🚗",
+      gradient: "from-purple-500 to-pink-600",
+      bgColor: "from-purple-50 to-pink-50",
       change: "+15%",
       changeLabel: "conversion rate",
+      changePositive: true,
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {cards.map((card, index) => (
         <div
           key={index}
-          className="bg-white rounded-lg shadow-sm border border-slate-200 p-6"
+          className="gradient-card p-6 rounded-2xl card-hover relative overflow-hidden"
           data-testid={`kpi-${card.label.toLowerCase().replace(/\s+/g, '-')}`}
         >
-          <div className="flex items-center">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-500">{card.label}</p>
-              <p className="text-2xl font-semibold text-slate-900">{card.value}</p>
+          {/* Background decoration */}
+          <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${card.bgColor} rounded-full -translate-y-10 translate-x-10 opacity-30`}></div>
+          
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">{card.label}</p>
+                <p className="text-3xl font-bold text-gray-800">{card.value}</p>
+              </div>
+              <div className={`w-14 h-14 bg-gradient-to-br ${card.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
+                <span className="text-xl">{card.icon}</span>
+              </div>
             </div>
-            <div className={`w-12 h-12 bg-${card.color}-100 rounded-lg flex items-center justify-center`}>
-              <i className={`${card.icon} text-${card.color}-600`}></i>
+            
+            <div className="flex items-center">
+              <div className={`inline-flex items-center px-3 py-1 rounded-xl text-sm font-medium ${
+                card.changePositive 
+                  ? "bg-emerald-100 text-emerald-700" 
+                  : "bg-red-100 text-red-700"
+              }`}>
+                <span className="mr-1">{card.changePositive ? "📈" : "📉"}</span>
+                {card.change}
+              </div>
+              <span className="text-sm text-gray-500 ml-2">{card.changeLabel}</span>
             </div>
-          </div>
-          <div className="mt-4 flex items-center">
-            <span className="text-sm text-green-600 font-medium">{card.change}</span>
-            <span className="text-sm text-slate-500 ml-1">{card.changeLabel}</span>
           </div>
         </div>
       ))}
